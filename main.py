@@ -1,9 +1,19 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.models import ChatRequest, ChatResponse, Recommendation
 from app.chains import rag_chain
 from app.utils import get_streaming_availability
 
 app = FastAPI()
+
+# Enable CORS for frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # In production, specify your frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/recommend", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):

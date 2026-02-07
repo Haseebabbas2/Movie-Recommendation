@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Concierge | Netflix & Prime Video Recommendations</title>
+    <meta name="description" content="AI-powered movie recommendations from Netflix and Prime Video based on your preferences.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">🎬</span>
+                <h1>Movie Concierge</h1>
+            </div>
+            <div class="platforms-badge">
+                <span class="platform-tag netflix">Netflix</span>
+                <span class="platform-tag prime">Prime Video</span>
+            </div>
+        </header>
+
+        <!-- Main Chat Area -->
+        <main class="main-content">
+            <!-- Chat Messages -->
+            <div class="chat-container" id="chatContainer">
+                <div class="welcome-message">
+                    <div class="welcome-icon">🍿</div>
+                    <h2>Welcome to Movie Concierge</h2>
+                    <p>Tell me what kind of movie you're in the mood for, and I'll find the perfect recommendations from Netflix and Prime Video!</p>
+                    <div class="suggestion-chips">
+                        <button class="chip" onclick="sendSuggestion('Recommend me some thriller movies')">🎭 Thrillers</button>
+                        <button class="chip" onclick="sendSuggestion('What are some good romantic comedies?')">💕 Rom-Coms</button>
+                        <button class="chip" onclick="sendSuggestion('Show me top action movies')">💥 Action</button>
+                        <button class="chip" onclick="sendSuggestion('Suggest some sci-fi films')">🚀 Sci-Fi</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations Section -->
+            <div class="recommendations-container" id="recommendationsContainer">
+                <!-- Movie cards will be injected here -->
+            </div>
+        </main>
+
+        <!-- Input Area -->
+        <footer class="input-area">
+            <div class="input-wrapper">
+                <div class="location-selector">
+                    <label for="location">📍</label>
+                    <select id="location" name="location">
+                        <option value="PK">Pakistan</option>
+                        <option value="US">United States</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="IN">India</option>
+                        <option value="CA">Canada</option>
+                        <option value="AU">Australia</option>
+                        <option value="DE">Germany</option>
+                        <option value="FR">France</option>
+                    </select>
+                </div>
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Ask for movie recommendations..." 
+                    autocomplete="off"
+                >
+                <button id="sendButton" class="send-button" onclick="sendMessage()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Finding perfect movies for you...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
