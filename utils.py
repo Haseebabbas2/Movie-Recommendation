@@ -16,4 +16,3 @@ def get_straming_availability(tmdb_id: int, region: str = "PK"):
     sources = requests.get(sources_url).json()
     
     return list(set([s['name'] for s in sources if s['type'] == 'sub']))
-    
