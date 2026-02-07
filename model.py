@@ -8,7 +8,7 @@ class ChatRequest(BaseModel):
 class Recommendation(BaseModel):
     title: str
     overview: str
-    platform: str
+    platform: List[str]
 
 class ChatResponse(BaseModel):
     reply: str
