@@ -1,15 +1,13 @@
-import os;
-import requests;
-from fastapi import FastAPI
+import os
+import requests
+from dotenv import load_dotenv
 from langchain_pinecone import PineconeVectorStore
-from langchain_community.document_loaders import JSONLoader
+from langchain_huggingface import HuggingFaceEmbeddings
 
-
-os.environ["GOOGLE_API_KEY"] =""
-os.environ["PINECONE_API_KEY"] =""
+load_dotenv()
 
 def index_movies():
-    TMDB_KEY =""
+    TMDB_KEY = os.getenv("TMDB_KEY")
     url = f"https://api.themoviedb.org/3/movie/top_rated?api_key={TMDB_KEY}&language=en-US&page=1"
     movies = requests.get(url).json()['results']
 
@@ -18,12 +16,19 @@ def index_movies():
 
     for movie in movies:
         content = f"Title: {movie['title']}. Overview: {movie['overview']}"
-        text.append(content)
-        metadatas.append({"tmdb_id": movie['id'], "title": movie['title']})
+        texts.append(content)
+        metadatas.append({
+            "tmdb_id": movie['id'], 
+            "title": movie['title'],
+            "overview": movie['overview']
+        })
 
+    print(f"Loaded {len(texts)} movies from TMDB")
 
-    embeddings = GollgleGenerativeAIEmbeddings(model="models/text-embedding-004")
+    # Using HuggingFace embeddings (384 dimensions)
+    embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
+    print("Creating embeddings and uploading to Pinecone...")
     vectorstore = PineconeVectorStore.from_texts(
         texts,
         embeddings,
@@ -31,7 +36,7 @@ def index_movies():
         metadatas=metadatas
     )
 
-    print ("Ingestion completed")
+    print("Ingestion completed! Indexed", len(texts), "movies.")
 
 if __name__ == "__main__":
     index_movies()

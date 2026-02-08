@@ -8,21 +8,21 @@
     --bg-tertiary: #1a1a1a;
     --bg-glass: rgba(255, 255, 255, 0.05);
     --bg-glass-hover: rgba(255, 255, 255, 0.08);
-    
+
     --text-primary: #ffffff;
     --text-secondary: #b3b3b3;
     --text-muted: #737373;
-    
+
     --netflix-red: #E50914;
     --netflix-red-hover: #f40612;
     --prime-blue: #00A8E1;
     --prime-blue-hover: #00bfff;
-    
+
     --accent-gradient: linear-gradient(135deg, var(--netflix-red), var(--prime-blue));
-    
+
     --border-color: rgba(255, 255, 255, 0.1);
     --shadow-color: rgba(0, 0, 0, 0.5);
-    
+
     /* Spacing */
     --spacing-xs: 0.25rem;
     --spacing-sm: 0.5rem;
@@ -30,14 +30,14 @@
     --spacing-lg: 1.5rem;
     --spacing-xl: 2rem;
     --spacing-2xl: 3rem;
-    
+
     /* Border Radius */
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
     --radius-xl: 24px;
     --radius-full: 9999px;
-    
+
     /* Transitions */
     --transition-fast: 150ms ease;
     --transition-normal: 250ms ease;
@@ -47,7 +47,9 @@
 /* ============================================
    Reset & Base Styles
    ============================================ */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -537,6 +539,7 @@ body {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -547,6 +550,7 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -554,9 +558,12 @@ body {
 }
 
 @keyframes bounce {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0);
     }
+
     50% {
         transform: translateY(-10px);
     }
@@ -663,4 +670,364 @@ body {
     .platform-tag {
         font-size: 0.625rem;
     }
+}
+
+/* ============================================
+   Tab Navigation
+   ============================================ */
+.tab-nav {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+}
+
+.tab-button {
+    flex: 1;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-family: inherit;
+}
+
+.tab-button:hover {
+    background: var(--bg-glass-hover);
+    color: var(--text-primary);
+}
+
+.tab-button.active {
+    background: var(--accent-gradient);
+    color: white;
+    border-color: transparent;
+}
+
+/* Tab Content */
+.tab-content {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+    gap: var(--spacing-md);
+}
+
+.tab-content.active {
+    display: flex;
+}
+
+/* ============================================
+   Availability Search
+   ============================================ */
+.availability-search {
+    padding: var(--spacing-2xl);
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    text-align: center;
+}
+
+.search-header {
+    margin-bottom: var(--spacing-xl);
+}
+
+.search-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-md);
+}
+
+.search-header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-sm);
+}
+
+.search-header p {
+    color: var(--text-secondary);
+}
+
+.availability-input-wrapper {
+    display: flex;
+    gap: var(--spacing-sm);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.availability-input-wrapper input {
+    flex: 1;
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color var(--transition-normal);
+}
+
+.availability-input-wrapper input:focus {
+    border-color: var(--text-muted);
+}
+
+.availability-input-wrapper input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-button {
+    padding: var(--spacing-md) var(--spacing-xl);
+    background: var(--accent-gradient);
+    border: none;
+    border-radius: var(--radius-md);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+    font-family: inherit;
+}
+
+.search-button:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 25px rgba(229, 9, 20, 0.3);
+}
+
+/* ============================================
+   Availability Results
+   ============================================ */
+.availability-results {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-md) 0;
+}
+
+.availability-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    animation: fadeIn 0.4s ease;
+}
+
+.availability-card h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-sm);
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.availability-card .movie-overview {
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-lg);
+    line-height: 1.6;
+}
+
+.availability-summary {
+    margin-bottom: var(--spacing-lg);
+}
+
+.region-count {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.regions-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.region-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-normal);
+}
+
+.region-item:hover {
+    border-color: var(--text-muted);
+    transform: translateY(-2px);
+}
+
+.region-flag {
+    font-size: 1.5rem;
+}
+
+.region-name {
+    flex: 1;
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.region-platforms {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+/* No Availability */
+.no-availability {
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.sad-icon {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: var(--spacing-md);
+}
+
+.no-availability p {
+    color: var(--text-secondary);
+}
+
+/* Responsive for Availability */
+@media (max-width: 768px) {
+    .tab-nav {
+        flex-direction: column;
+    }
+
+    .availability-search {
+        padding: var(--spacing-lg);
+    }
+
+    .availability-input-wrapper {
+        flex-direction: column;
+    }
+
+    .search-button {
+        width: 100%;
+    }
+
+    .regions-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================
+   Content Type Headers (Movie/TV Show)
+   ============================================ */
+.content-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.type-icon {
+    font-size: 2.5rem;
+    line-height: 1;
+}
+
+.content-info {
+    flex: 1;
+}
+
+.content-info h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-xs);
+}
+
+.type-badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.type-badge.movie {
+    background: rgba(229, 9, 20, 0.2);
+    color: var(--netflix-red);
+    border: 1px solid var(--netflix-red);
+}
+
+.type-badge.tv-show {
+    background: rgba(0, 168, 225, 0.2);
+    color: var(--prime-blue);
+    border: 1px solid var(--prime-blue);
+}
+
+/* ============================================
+   Seasons Display
+   ============================================ */
+.seasons-info {
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md);
+    background: var(--bg-tertiary);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.seasons-badge {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--prime-blue);
+    color: white;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: var(--spacing-sm);
+}
+
+.seasons-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-sm);
+}
+
+.season-tag {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-glass);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+}
+
+/* No Availability Small */
+.no-availability-small {
+    padding: var(--spacing-md);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* Multiple Cards Spacing */
+.availability-results .availability-card {
+    margin-bottom: var(--spacing-md);
+}
+
+.availability-results .availability-card:last-child {
+    margin-bottom: 0;
 }

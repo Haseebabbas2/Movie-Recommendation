@@ -1,8 +1,10 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.models import ChatRequest, ChatResponse, Recommendation
-from app.chains import rag_chain
-from app.utils import get_streaming_availability
+from pydantic import BaseModel
+from typing import Optional, List, Dict, Any
+from model import ChatRequest, ChatResponse, Recommendation
+from chains import invoke_rag
+from utils import get_streaming_availability, get_content_availability, COUNTRY_CODES
 
 app = FastAPI()
 
@@ -15,10 +17,55 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+class AvailabilityRequest(BaseModel):
+    query: str
+
+
+class ContentResult(BaseModel):
+    id: int
+    title: str
+    overview: str
+    type: str
+    media_type: str
+    release_date: str
+    availability: Dict[str, Any]
+    available_regions: List[str]
+    total_regions: int
+    seasons: Optional[List[Dict]] = None
+    total_seasons: Optional[int] = None
+
+
+class AvailabilityResponse(BaseModel):
+    results: List[ContentResult]
+    total_found: int
+
+
+@app.get("/countries")
+async def get_countries():
+    """Get list of supported countries."""
+    return {"countries": COUNTRY_CODES}
+
+
+@app.post("/availability")
+async def check_availability(request: AvailabilityRequest):
+    """Check movie/TV show availability across regions."""
+    result = get_content_availability(request.query)
+    
+    if "error" in result:
+        return {
+            "results": [],
+            "total_found": 0,
+            "error": result["error"]
+        }
+    
+    return result
+
+
 @app.post("/recommend", response_model=ChatResponse)
 async def chat_endpoint(request: ChatRequest):
     # 1. Retrieve & Generate with LangChain
-    result = rag_chain.invoke({"input": request.message})
+    result = invoke_rag(request.message)
     
     # 2. Add Live Streaming Filter
     final_recs = []
@@ -27,7 +74,7 @@ async def chat_endpoint(request: ChatRequest):
         final_recs.append(Recommendation(
             title=doc.metadata["title"],
             overview=doc.metadata["overview"],
-            platforms=available_on
+            platform=available_on
         ))
 
     return ChatResponse(

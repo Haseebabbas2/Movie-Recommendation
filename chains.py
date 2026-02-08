@@ -1,13 +1,18 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
+from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_pinecone import PineconeVectorStore
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.prompts import ChatPromptTemplate
-from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain.chains import create_retrieval_chain
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
 
-embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
+load_dotenv()
+
+# Using HuggingFace embeddings (384 dimensions)
+embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 vectorstore = PineconeVectorStore(index_name=os.getenv("PINECONE_INDEX"), embedding=embeddings)
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash")
+llm = ChatGoogleGenerativeAI(model="gemini-3-flash-preview")
 
 prompt = ChatPromptTemplate.from_template("""
 You are a helpful movie concierge. Use the provided context to answer the user's request.
@@ -15,5 +20,21 @@ Context: {context}
 User Question: {input}
 """)
 
-combine_docs_chain = create_stuff_documents_chain(llm, prompt)
-rag_chain = create_retrieval_chain(vectorstore.as_retriever(search_kwargs={"k": 3}), combine_docs_chain)
+retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+# Create the RAG chain
+rag_chain = (
+    {"context": retriever | format_docs, "input": RunnablePassthrough()}
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+# Wrapper to match expected output format with context
+def invoke_rag(query):
+    docs = retriever.invoke(query)
+    answer = rag_chain.invoke(query)
+    return {"answer": answer, "context": docs}
