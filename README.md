@@ -121,4 +121,4 @@ MIT License
 
 ---
 
-Made with ❤️ by [Haseeb Abbas](https://github.com/Haseebabbas2)
+Made by [Haseeb Abbas](https://github.com/Haseebabbas2)
