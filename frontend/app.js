@@ -270,6 +270,31 @@ async function sendMessage() {
 }
 
 /**
+ * Format AI response - clean up markdown formatting
+ */
+function formatAIResponse(text) {
+    // Remove ** bold markers (non-greedy)
+    text = text.replace(/\*\*([^*]+)\*\*/g, '$1');
+
+    // Remove * italic markers
+    text = text.replace(/\*([^*]+)\*/g, '$1');
+
+    // Convert bullet points (* at start of line) to clean bullets
+    text = text.replace(/^\s*[\*\-]\s+/gm, '\n• ');
+
+    // Remove any remaining standalone asterisks
+    text = text.replace(/\s\*\s/g, ' ');
+
+    // Clean up multiple newlines
+    text = text.replace(/\n{3,}/g, '\n\n');
+
+    // Trim whitespace
+    text = text.trim();
+
+    return text;
+}
+
+/**
  * Add a message to the chat container
  */
 function addMessage(text, type) {
@@ -278,10 +303,13 @@ function addMessage(text, type) {
 
     const avatar = type === 'user' ? '👤' : '🤖';
 
+    // Format AI responses to remove markdown
+    const displayText = type === 'ai' ? formatAIResponse(text) : text;
+
     messageDiv.innerHTML = `
         <div class="message-avatar">${avatar}</div>
         <div class="message-bubble">
-            <p class="message-text">${escapeHtml(text)}</p>
+            <p class="message-text">${escapeHtml(displayText).replace(/\n/g, '<br>')}</p>
         </div>
     `;
 
